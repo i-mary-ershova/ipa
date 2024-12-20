@@ -21,3 +21,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+.python-version
+.pyproject.toml
+.requirements-dev.lock
+.requirements.lock
