@@ -3,7 +3,7 @@ import pickle
 from tensorflow.keras.models import load_model
 import re
 sentence_transcription = ""
-
+ex = "студенческого"
 example_sentence = """Добрый день, извините, Вы не могли бы мне помочь? Кажется, я заблудился. 
 Интернет перестал ловить и не загружается карта. Я не знаю, где сейчас нахожусь.
 
@@ -25,8 +25,9 @@ with open('work.pkl', 'rb') as f:
 
 
 def clean_text(text):
-    text = text.lower()
-    return re.sub(r'[^\w\s]', '', text)
+    #text = text.lower()
+    text = re.sub(r'[^А-Яа-яЁё\s\n]', '', text)
+    return re.sub(r'\n', ' <NEWLINE> ', text)
     
 
 
@@ -53,7 +54,13 @@ def predict_sentence_transcription(sentence, max_sequence_length=50):
     cleaned_sentence = clean_text(sentence)
     words = cleaned_sentence.split()  
 
-    predicted_words = [predict_transcription(word, max_sequence_length) for word in words]
+    predicted_words = []
+    for word in words:
+        if word == '<NEWLINE>':
+            predicted_words.append('\n')  # добавляем перенос строки
+        else:
+            predicted_words.append(predict_transcription(word, max_sequence_length))
+
     sentence_transcription = ' '.join(predicted_words)
 
 def get_transcription():

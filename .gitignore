@@ -26,3 +26,4 @@ yarn-error.log*
 .pyproject.toml
 .requirements-dev.lock
 .requirements.lock
+.uv.lock
