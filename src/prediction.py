@@ -25,7 +25,7 @@ with open('work.pkl', 'rb') as f:
 
 
 def clean_text(text):
-    #text = text.lower()
+    text = text.lower()
     text = re.sub(r'[^А-Яа-яЁё\s\n]', '', text)
     return re.sub(r'\n', ' <NEWLINE> ', text)
     
@@ -56,15 +56,16 @@ def predict_sentence_transcription(sentence, max_sequence_length=50):
 
     predicted_words = []
     for word in words:
-        if word == '<NEWLINE>':
-            predicted_words.append('\n')  # добавляем перенос строки
-        else:
+        if word != '<NEWLINE>':
             predicted_words.append(predict_transcription(word, max_sequence_length))
-
+        else: predicted_words.append(word)
     sentence_transcription = ' '.join(predicted_words)
+    sentence_transcription = re.sub(r'\s*<NEWLINE>\s*', '\n', sentence_transcription)
+def get_transcription():
+    return sentence_transcription
 
 def get_transcription():
     return sentence_transcription
 
-predicted_sentence = predict_sentence_transcription(example_sentence)
-print(f"'{example_sentence}' -> '{get_transcription()}'")
+#predicted_sentence = predict_sentence_transcription(example_sentence)
+#print(f"'{example_sentence}' -> '{get_transcription()}'")
